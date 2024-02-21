@@ -63,8 +63,9 @@ kotlin {
         api(libs.androidx.core)
         api(libs.kotlinx.coroutines.android)
         api(libs.koin.android)
-        api(libs.koin.androidx.compose)
+        api(compose.preview)
 
+        implementation(libs.compose.ui.tooling.preview.android)
         implementation(libs.sqldelight.driver.android)
       }
     }
@@ -120,7 +121,6 @@ android {
   }
 }
 dependencies {
-  debugImplementation(libs.compose.ui.tooling.preview.android)
 }
 
 sqldelight {

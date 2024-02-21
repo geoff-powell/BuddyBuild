@@ -87,7 +87,7 @@ jobs:
           project-path: iosApp
 
       - name: Build Artifact with Xcode
-        run: xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug -destination generic/platform=iOS -archivePath $RUNNER_TEMP/Tidy.xcarchive archive
+        run: xcodebuild -project iosApp/iosApp.xcodeproj -scheme iosApp -configuration Debug -destination generic/platform=iOS -archivePath $RUNNER_TEMP/BuddyBuild.xcarchive archive
 
       - name: Upload Archive Artifacts
         uses: actions/upload-artifact@v4
@@ -103,7 +103,7 @@ jobs:
         run: |
           EXPORT_OPTS_PATH=$RUNNER_TEMP/ExportOptions.plist
           echo -n "$IOS_EXPORT_OPTIONS" | base64 --decode -o $EXPORT_OPTS_PATH
-          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/Tidy.xcarchive -exportPath $RUNNER_TEMP -exportOptionsPlist $EXPORT_OPTS_PATH
+          xcodebuild -exportArchive -archivePath $RUNNER_TEMP/BuddyBuild.xcarchive -exportPath $RUNNER_TEMP -exportOptionsPlist $EXPORT_OPTS_PATH
 
       - name: Upload to Github Artifacts
         if: github.event_name == 'push'
@@ -120,5 +120,5 @@ jobs:
         run: |
           mkdir -p ./private_keys
           echo "$IOS_APPSTORE_PRIVATE_KEY" | sed 's/[^A-Za-z0-9+/=]//g' | base64 --decode -o "./private_keys/AuthKey_$APPSTORE_API_KEY_ID.p8"
-          xcrun altool --validate-app -f ${{ runner.temp }}/Tidy.ipa -t ios --apiKey "$APPSTORE_API_KEY_ID" --apiIssuer ${{ secrets.IOS_APPSTORE_ISSUER_ID }}
-          xcrun altool --upload-app -f ${{ runner.temp }}/Tidy.ipa -t ios --apiKey "$APPSTORE_API_KEY_ID" --apiIssuer ${{ secrets.IOS_APPSTORE_ISSUER_ID }}
+          xcrun altool --validate-app -f ${{ runner.temp }}/BuddyBuild.ipa -t ios --apiKey "$APPSTORE_API_KEY_ID" --apiIssuer ${{ secrets.IOS_APPSTORE_ISSUER_ID }}
+          xcrun altool --upload-app -f ${{ runner.temp }}/BuddyBuild.ipa -t ios --apiKey "$APPSTORE_API_KEY_ID" --apiIssuer ${{ secrets.IOS_APPSTORE_ISSUER_ID }}
